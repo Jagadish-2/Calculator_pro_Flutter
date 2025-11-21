@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calculator/button_values.dart';
+import 'package:flutter/services.dart';
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -12,6 +13,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String number1 = ""; // 0-9
   String operand = ""; // + - * /
   String number2 = ""; // 0-9
+  List<String> history = [];
+  TextEditingController _controller = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,26 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         bottom: false,
         child: Column(
           children: [
+            // History section
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: ListView.builder(
+                  itemCount: history.length,
+                  itemBuilder: (context, index) {
+                    return Text(
+                      history[index],
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            // Display section
             //output
             Expanded(
               child: SingleChildScrollView(
@@ -168,7 +192,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       if (number1.endsWith(".0")) {
         number1 = number1.substring(0, number1.length - 2);
       }
-
+      history.add(number1);
       operand = "";
       number2 = "";
     });
